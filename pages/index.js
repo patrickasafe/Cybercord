@@ -1,24 +1,7 @@
-import { Box, Button, Text, TextField, Image } from '@skynexui/components'
-import appConfig from '../config.json'
-
-const GlobalStyle = () => {
-  return (
-    <style global jsx>{`
-      * {
-        background: black
-        margin: 0;
-        box-sizing: 0;
-      }
-
-      body {
-        font-family: sans-serif;
-      }
-    
-    
-    `}</style>
-
-  )
-}
+import { Box, Button, Text, TextField, Image } from '@skynexui/components';
+import { useState } from 'react';
+import appConfig from '../config.json';
+import { useRouter } from 'next/router';
 
 const Title = (props) => {
   const Tag = props.tag || "h1";
@@ -38,11 +21,11 @@ const Title = (props) => {
 }
 
 const HomePage = () => {
-  const username = `patrickasafe`
+  const [username, setUsername] = useState('')
+  const routing = useRouter();
+
   return (
     <>
-      <GlobalStyle/>
-
       <Box
         styleSheet={{
           display: 'flex', alignItems: 'center', justifyContent: 'center',
@@ -69,6 +52,12 @@ const HomePage = () => {
           {/* Formulário */}
           <Box
             as="form"
+            onSubmit={(e) => {
+              {/* prevents the default jump to another page */ }
+              e.preventDefault()
+              {/* make a transition to chat page */ }
+              routing.push('/chat')
+            }}
             styleSheet={{
               display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
               width: { xs: '100%', sm: '50%' }, textAlign: 'center', marginBottom: '32px',
@@ -79,7 +68,15 @@ const HomePage = () => {
               {appConfig.name}
             </Text>
 
+            {/*input box for username */}
             <TextField
+              value={username}
+              /*use of useStates for reactive use of input */
+              onChange={(e) => {
+                const value = event.target.value;
+                setUsername(value)
+              }}
+
               fullWidth
               textFieldColors={{
                 neutral: {
@@ -126,7 +123,8 @@ const HomePage = () => {
                 borderRadius: '50%',
                 marginBottom: '16px',
               }}
-              src={`https://github.com/${username}.png`}
+              /* Could have used useffect, as my friend teached me: Zé Augusto */
+              src={(username.length > 2) ? `https://github.com/${username}.png` : undefined}
             />
             <Text
               variant="body4"
