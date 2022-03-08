@@ -56,7 +56,7 @@ const HomePage = () => {
               {/* prevents the default jump to another page */ }
               e.preventDefault()
               {/* make a transition to chat page */ }
-              routing.push('/chat')
+              routing.push(`/chat?username=${username}`)
             }}
             styleSheet={{
               display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
@@ -126,7 +126,7 @@ const HomePage = () => {
               /* Could have used useffect, as my friend teached me: Zé Augusto */
               src={(username.length > 2) ? `https://github.com/${username}.png` : undefined}
             />
-            <Text
+            {username && <Text
               variant="body4"
               styleSheet={{
                 color: appConfig.theme.colors.neutrals[200],
@@ -136,7 +136,7 @@ const HomePage = () => {
               }}
             >
               {username}
-            </Text>
+            </Text>}
           </Box>
           {/* Photo Area */}
         </Box>
