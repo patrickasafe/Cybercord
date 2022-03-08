@@ -21,7 +21,7 @@ const Title = (props) => {
 }
 
 const HomePage = () => {
-  const [username, setUsername] = useState('')
+  const [username, setUsername ] = useState('')
   const routing = useRouter();
 
   return (
