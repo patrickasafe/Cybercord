@@ -79,7 +79,7 @@ const HomePage = () => {
               marginBottom: "32px",
             }}
           >
-            <Title tag="h2">Boas vindas de volta!</Title>
+            <Title tag="h2">Welcome back!</Title>
             <Text
               variant="body3"
               styleSheet={{
@@ -110,7 +110,7 @@ const HomePage = () => {
             />
             <Button
               type="submit"
-              label="Entrar"
+              label="Enter"
               fullWidth
               buttonColors={{
                 contrastColor: appConfig.theme.colors.neutrals["000"],
