@@ -5,13 +5,21 @@ import { useRouter } from "next/router";
 import { createClient } from "@supabase/supabase-js";
 import { ButtonSendSticker } from "../src/components/ButtonSendSticker";
 
-/*supabase entries */
 const SUPABASE_ANON_KEY =
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYW5vbiIsImlhdCI6MTY0NDI1MzMzMCwiZXhwIjoxOTU5ODI5MzMwfQ.fRWpRNAoGzQa-koO3e0CFfsS9JE7TgVj3GIllceNGZU";
 const SUPABASE_URL = "https://mnmawtrijgqrkozbhvvt.supabase.co";
 const supabaseClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-const ChatPage = () => {
+const listenRealTimeMessages = (addMessage) => {
+  return supabaseClient
+    .from("messages")
+    .on("INSERT", (liveAnswer) => {
+      addMessage(liveAnswer.new);
+    })
+    .subscribe();
+};
+
+export const ChatPage = () => {
   const routing = useRouter();
   const loggedUser = routing.query.username;
   const [message, setMessage] = React.useState("");
@@ -23,14 +31,22 @@ const ChatPage = () => {
       .select("*")
       .order("id", { ascending: false })
       .then(({ data }) => {
-        console.log("Dados da consulta:", data);
         setMessagesList(data);
       });
+
+    const subscription = listenRealTimeMessages((newMessage) => {
+      setMessagesList((updatedMessageList) => {
+        return [newMessage, ...updatedMessageList];
+      });
+    });
+
+    return () => {
+      subscription.unsubscribe();
+    };
   }, []);
 
   const handleNewMessage = (newMessage) => {
     const message = {
-      //id: messagesList.length + 1,//
       from: loggedUser,
       text: newMessage,
     };
@@ -39,7 +55,7 @@ const ChatPage = () => {
       .from("messages")
       .insert([message])
       .then(({ data }) => {
-        setMessagesList([data[0], ...messagesList]);
+        // setMessagesList([data[0], ...messagesList]);
       });
 
     setMessage("");
@@ -122,7 +138,11 @@ const ChatPage = () => {
                 color: appConfig.theme.colors.neutrals[200],
               }}
             />
-            <ButtonSendSticker/>
+            <ButtonSendSticker
+              onStickerClick={(sticker) => {
+                handleNewMessage(`:sticker:${sticker}`);
+              }}
+            />
           </Box>
         </Box>
       </Box>
@@ -223,7 +243,13 @@ function MessageList(props) {
                   </Text>
                 </Box>
 
-                <Text styleSheet={{}}>{message.text}</Text>
+                <Text>
+                  {message.text.startsWith(":sticker:") ? (
+                    <Image src={message.text.replace(":sticker:", "")} />
+                  ) : (
+                    message.text
+                  )}
+                </Text>
               </Box>
             </Box>
           </Text>
