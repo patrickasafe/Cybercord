@@ -1,5 +1,5 @@
 {
-  "name": "Cybercord - Matrix (patrickasafe)",
+  "name": "Cybercord - Neuromancer (patrickasafe)",
   "theme": {
     "colors": {
       "primary": {
@@ -7,9 +7,9 @@
         "100": "#C1EAC5",
         "200": "#A3D9A5",
         "300": "#7BC47F",
-        "400": "#57AE5B",
-        "500": "#3F9142",
-        "600": "#2F8132",
+        "400": "#E297A0",
+        "500": "#E75071",
+        "600": "#C52E56",
         "700": "#207227",
         "800": "#0E5814",
         "900": "#05400A"
