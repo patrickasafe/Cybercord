@@ -92,6 +92,7 @@ const HomePage = () => {
 
             {/*input box for username */}
             <TextField
+              placeholder="Please, type your GitHub username..."
               value={username}
               /*use of useStates for reactive use of input */
               onChange={(e) => {
@@ -110,7 +111,7 @@ const HomePage = () => {
             />
             <Button
               type="submit"
-              label="Enter"
+              label="Login"
               fullWidth
               buttonColors={{
                 contrastColor: appConfig.theme.colors.neutrals["000"],
